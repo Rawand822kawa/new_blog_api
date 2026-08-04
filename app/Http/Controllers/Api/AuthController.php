@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Actions\Auth\RegisterUser;
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\ValidationException;
+use App\Actions\Auth\LoginUser;
+use App\Actions\Auth\LogoutUser;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
+    public function register(Request $request, RegisterUser $registerUser)
     {
         // Validate the data sent by the user
         $request->validate([
@@ -21,11 +20,11 @@ class AuthController extends Controller
         ]);
 
         // Create a new user
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        $user = $registerUser->execute([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => $request->password,
+]);
 
         // Return a JSON response
         return response()->json([
@@ -33,7 +32,7 @@ class AuthController extends Controller
             'user' => $user
         ], 201);
     }
-    public function login(Request $request)
+    public function login(Request $request, LoginUser $loginUser)
 {
     // Check that email and password were provided
     $request->validate([
@@ -41,31 +40,22 @@ class AuthController extends Controller
         'password' => 'required',
     ]);
 
-    // Check if the email and password are correct
-    if (!Auth::attempt($request->only('email', 'password'))) {
-        throw ValidationException::withMessages([
-            'email' => ['The provided credentials are incorrect.'],
-        ]);
-    }
+    $result = $loginUser->execute(
+    $request->only('email', 'password')
+);
 
-    // Get the logged-in user
-    $user = Auth::user();
-
-    // Create a Sanctum token
-    $token = $user->createToken('api-token')->plainTextToken;
-
-    // Return the token
-    return response()->json([
-        'message' => 'Login successful!',
-        'token' => $token,
-    ]);
+return response()->json([
+    'message' => 'Login successful!',
+    'token' => $result['token'],
+]);
 }
-public function logout(Request $request)
+public function logout(Request $request, LogoutUser $logoutUser)
 {
-    $request->user()->currentAccessToken()->delete();
+    $logoutUser->execute($request->user());
 
-    return response()->json([
-        'message' => 'Logged out successfully!'
-    ]);
+return response()->json([
+    'message' => 'Logged out successfully!'
+]);
 }
+
 }
