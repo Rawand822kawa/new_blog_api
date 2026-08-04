@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Actions\Comment\DeleteComment;
+use App\Actions\Comment\PostComment;
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
 use App\Models\Post;
@@ -19,25 +21,17 @@ class CommentController extends Controller
     }
 
     // POST /api/posts/{id}/comments
-    public function store(Request $request, $id)
+    public function store(Request $request, $id, PostComment $postComment)
     {
         $request->validate([
             'comment' => 'required',
         ]);
 
-        $post = Post::find($id);
-
-        if (!$post) {
-            return response()->json([
-                'message' => 'Post not found'
-            ], 404);
-        }
-
-        $comment = Comment::create([
-            'user_id' => Auth::id(),
-            'post_id' => $id,
-            'comment' => $request->input('comment'),
-        ]);
+    $comment = $postComment->execute([
+         'comment'=>$request['comment'],
+    'user_id'=>$request['user_id'],
+    ],$id);
+        
 
         return response()->json([
             'message' => 'Comment added successfully!',
@@ -46,23 +40,11 @@ class CommentController extends Controller
     }
 
     // DELETE /api/comments/{id}
-    public function destroy($id)
+    public function destroy(Request $request,$id, DeleteComment $deleteComment)
     {
-        $comment = Comment::find($id);
-
-        if (!$comment) {
-            return response()->json([
-                'message' => 'Comment not found'
-            ], 404);
-        }
-
-        if ($comment->user_id != Auth::id()) {
-            return response()->json([
-                'message' => 'Unauthorized'
-            ], 403);
-        }
-
-        $comment->delete();
+        $deleteComment->execute([
+            'user_id'=>$request->user()->id
+        ],$id);
 
         return response()->json([
             'message' => 'Comment deleted successfully!'
