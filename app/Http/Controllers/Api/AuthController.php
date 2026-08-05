@@ -2,28 +2,23 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Actions\Auth\RegisterUser;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Actions\Auth\LoginUser;
 use App\Actions\Auth\LogoutUser;
+use App\Actions\Auth\RegisterUser;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-    public function register(Request $request, RegisterUser $registerUser)
+    public function register(RegisterRequest $request, RegisterUser $registerUser)
     {
         // Validate the data sent by the user
-        $request->validate([
-            'name' => 'required|string|max:50',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:8',
-        ]);
-
+        
         // Create a new user
         $user = $registerUser->execute([
-        'name' => $request->name,
-        'email' => $request->email,
-        'password' => $request->password,
+        $request->validated()
 ]);
 
         // Return a JSON response
@@ -32,16 +27,13 @@ class AuthController extends Controller
             'user' => $user
         ], 201);
     }
-    public function login(Request $request, LoginUser $loginUser)
+    public function login(LoginRequest $request, LoginUser $loginUser)
 {
     // Check that email and password were provided
-    $request->validate([
-        'email' => 'required|email',
-        'password' => 'required',
-    ]);
+    
 
     $result = $loginUser->execute(
-    $request->only('email', 'password')
+    $request->validated()
 );
 
 return response()->json([

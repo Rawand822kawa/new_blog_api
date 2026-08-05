@@ -9,7 +9,7 @@ use App\Models\Post;
 class PostComment{
   public function execute(array $data,int $id):Comment{
     
-  $post=Post::findOrFail($id);
+  Post::findOrFail($id);
 
   $comment = Comment::create([
     'comment'=>$data['comment'],

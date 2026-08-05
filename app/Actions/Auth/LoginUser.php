@@ -9,7 +9,6 @@ use Illuminate\Validation\ValidationException;
 class LoginUser{
 
   public function execute(array $data){
-
     if(!Auth::attempt($data)){
       throw ValidationException::withMessages([
         'email'=>['The provided credentials are incorrect.']

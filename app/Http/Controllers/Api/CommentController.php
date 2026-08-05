@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Actions\Comment\DeleteComment;
 use App\Actions\Comment\PostComment;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Comment\CreateCommentRequest;
 use App\Models\Comment;
 use App\Models\Post;
 use Illuminate\Http\Request;
@@ -21,16 +22,16 @@ class CommentController extends Controller
     }
 
     // POST /api/posts/{id}/comments
-    public function store(Request $request, $id, PostComment $postComment)
+    public function store(CreateCommentRequest $request, $id, PostComment $postComment)
     {
-        $request->validate([
-            'comment' => 'required',
-        ]);
+    $ValidatedData = $request->validated();
+    
+    $UserId =[ 'user_id'=>$request->user()->id];
 
-    $comment = $postComment->execute([
-         'comment'=>$request['comment'],
-    'user_id'=>$request['user_id'],
-    ],$id);
+    $mergedArray = array_merge($ValidatedData,$UserId);
+
+
+    $comment = $postComment->execute($mergedArray,$id);
         
 
         return response()->json([

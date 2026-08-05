@@ -7,6 +7,9 @@ use App\Actions\Posts\CreatePost;
 use App\Actions\Posts\DeletePost;
 use App\Actions\Posts\UpdatePost;
 use App\Http\Controllers\Controller;
+
+use App\Http\Requests\Posts\CreatePostRequest;
+use App\Http\Requests\Posts\UpdatePostRequest;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -31,21 +34,14 @@ class PostController extends Controller
     }
 
     // POST /api/posts
-    public function store(Request $request, CreatePost $createPost)
+    public function store(CreatePostRequest $request, CreatePost $createPost)
     {
         // Validate the data
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
+        
 
         $post=$createPost->execute(
             [
-                'user_id'=>$request->user->id,
-                'title'=>$request['title'],
-                'content'=>$request['content'],
-                'image'=>$request['image']
+                $request->validated()
             ]
         );
 
@@ -57,18 +53,13 @@ class PostController extends Controller
     }
 
     // PUT /api/posts/{id}
-    public function update(Request $request, $id, UpdatePost $updatePost)
+    public function update(UpdatePostRequest $request, $id, UpdatePost $updatePost)
     {
         // Validate the data
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required',
-        ]);
+        
 
         $post = $updatePost->execute([
-        'user_id'=>$request->user()->id,
-        'title'=>$request['title'],
-        'content'=>$request['content']
+        $request->validated()
         ] 
         ,$id);
 
