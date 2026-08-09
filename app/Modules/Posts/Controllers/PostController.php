@@ -49,11 +49,8 @@ class PostController
     }
 
     // PUT 
-    public function update(
-        UpdatePostRequest $request,
-        Post $post,
-        UpdatePost $updatePost
-    ) {
+    public function update(UpdatePostRequest $request,Post $post,UpdatePost $updatePost)
+     {
         $data = $request->validated();
 
         $user_id = [

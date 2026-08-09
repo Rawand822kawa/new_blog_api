@@ -17,20 +17,32 @@ Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth:sanctum');
 
 // Posts
-Route::get('/posts', [PostController::class, 'index']);
-Route::get('/posts/{post}', [PostController::class, 'show']);
+Route::prefix('post')->group(function(){
+    
+    Route::get('/', [PostController::class, 'index']);
+    
+    Route::get('/{post}', [PostController::class, 'show']);
 
-Route::post('/posts', [PostController::class, 'store'])
-    ->middleware('auth:sanctum');
+    Route::middleware('auth:sanctum')->group(function(){
 
-Route::put('/posts/{post}', [PostController::class, 'update'])
-    ->middleware('auth:sanctum');
+        Route::post('/', [PostController::class, 'store']);
 
-Route::delete('/posts/{post}', [PostController::class, 'destroy'])
-    ->middleware('auth:sanctum');
+        Route::put('/{post}', [PostController::class, 'update']);
+
+        Route::delete('/{post}', [PostController::class, 'destroy']);
+    });
+    //yo mate this one is the comments route but
+    // the prefix of it is post so there is no issue in it being here
+Route::get('/{post}/comments', [CommentController::class, 'index']);
+
+
+});
+
+
 
 // Comments
-Route::get('/posts/{post}/comments', [CommentController::class, 'index']);
+
+
 
 
 
