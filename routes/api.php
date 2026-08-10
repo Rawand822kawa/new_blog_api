@@ -2,9 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Modules\User\Controllers\AuthController;
-use App\Modules\Posts\Controllers\PostController;
-use App\Modules\Comments\Controllers\CommentController;
+use Modules\User\Controllers\AuthController;
+use Modules\Posts\Controllers\PostController;
+use Modules\Comments\Controllers\CommentController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
