@@ -20,6 +20,7 @@ return new class extends Migration
 
         $table->text('content');
 
+
         $table->string('image')->nullable();
 
         $table->timestamps();

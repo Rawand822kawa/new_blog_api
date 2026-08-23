@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\User\Controllers\AuthController;
+use Modules\User\HTTP\Controllers\AuthController;
 
 Route::post('/register', [AuthController::class, 'register']);
 

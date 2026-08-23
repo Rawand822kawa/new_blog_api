@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\User\Controllers;
+namespace Modules\User\HTTP\Controllers;
 
 use Modules\User\Actions\LoginUser;
 use Modules\User\Actions\LogoutUser;

@@ -2,9 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Modules\User\Controllers\AuthController;
-use Modules\Posts\Controllers\PostController;
-use Modules\Comments\Controllers\CommentController;
+use Modules\User\HTTP\Controllers\AuthController;
+use Modules\Posts\HTTP\Controllers\PostController;
+use Modules\Comments\HTTP\Controllers\CommentController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -18,9 +18,9 @@ Route::post('/logout', [AuthController::class, 'logout'])
 
 // Posts
 Route::prefix('post')->group(function(){
-    
+
     Route::get('/', [PostController::class, 'index']);
-    
+
     Route::get('/{post}', [PostController::class, 'show']);
 
     Route::middleware('auth:sanctum')->group(function(){

@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Post\Controllers\PostController;
+use Modules\Posts\HTTP\Controllers\PostController;
 
 Route::prefix('posts')->group(function () {
 

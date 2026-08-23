@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Posts\Controllers;
+namespace Modules\Posts\HTTP\Controllers;
 
 use Modules\Posts\Actions\CreatePost;
 use Modules\Posts\Actions\DeletePost;
@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 
 class PostController
 {
-    // GET 
+    // GET
     public function index()
     {
         $posts = Post::all();
@@ -21,7 +21,7 @@ class PostController
         return response()->json($posts);
     }
 
-    // GET 
+    // GET
     public function show(Post $post)
     {
         return response()->json([
@@ -29,7 +29,7 @@ class PostController
         ]);
     }
 
-    // POST 
+    // POST
     public function store(CreatePostRequest $request, CreatePost $createPost)
     {
         $data = $request->validated();
@@ -48,7 +48,7 @@ class PostController
         ], 201);
     }
 
-    // PUT 
+    // PUT
     public function update(UpdatePostRequest $request,Post $post,UpdatePost $updatePost)
      {
         $data = $request->validated();

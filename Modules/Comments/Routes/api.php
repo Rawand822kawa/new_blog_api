@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Comment\Controllers\CommentController;
+use Modules\Comments\HTTP\Controllers\CommentController;
 
 Route::prefix('posts')->group(function () {
 

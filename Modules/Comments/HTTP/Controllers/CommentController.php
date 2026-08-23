@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Comments\Controllers;
+namespace Modules\Comments\HTTP\Controllers;
 
 use Modules\Comments\Actions\DeleteComment;
 use Modules\Comments\Actions\PostComment;
@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 
 class CommentController
 {
-    // GET 
+    // GET
     public function index($id)
     {
         $comments = Comment::where('post_id', $id)->get();
@@ -20,7 +20,7 @@ class CommentController
         return response()->json($comments);
     }
 
-    // POST 
+    // POST
     public function store(CreateCommentRequest $request, $id, PostComment $postComment)
     {
         $ValidatedData = $request->validated();
@@ -36,7 +36,7 @@ class CommentController
         ], 201);
     }
 
-    // DELETE 
+    // DELETE
     public function destroy(Request $request, $id, DeleteComment $deleteComment)
     {
         $deleteComment->execute([
